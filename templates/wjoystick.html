@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<title>Web Joystick</title>
+		<link rel="stylesheet" href="/static/styles.css" type="text/css">
+		<!--<style>-->
+			<!--background: #c7b39b url({{ url_for("video_feed") }});-->
+			<!--color:#fff;-->
+		<!--</style>-->
+	</head>
+		<body>
+
+
+		<div class="videoWindow"><img class="videoFrame" src="{{ url_for('video_feed') }}"></div>
+
+		<div class="joystick">
+			<!--<div id="video"><img src="{{ url_for('video_feed') }}"></div>-->
+			<table>
+				<tr>
+					<td></td>
+					<td><input type="button" class="trbutton" value="up" id="upButton"></td>
+					<td></td>
+				</tr>
+
+				<tr>
+					<td><input type="button" class="trbutton" value="left" id="leftButton"></td>
+					<td></td>
+					<td><input type="button" class="trbutton" value="right" id="rightButton"></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="button" class="trbutton" value="down" id="downButton"></td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+
+		<script>
+			var request = new XMLHttpRequest();
+
+			class Menu {
+			  handleEvent(event) {
+				var val = event.currentTarget.value;
+				switch(event.type) {
+				  case 'mousedown':
+					request.open("GET", "mouse/" + "press," + val, true);
+					break;
+				  case 'mouseup':
+					request.open("GET", "mouse/" + "release," + val, true);
+					break;
+				  case 'touchstart':
+              		request.open("GET", "mouse/" + "press," + val, true);
+              		break;
+            	  case 'touchend':
+              		request.open("GET", "mouse/" + "release," + val, true);
+                    break;
+				  }
+				request.send();
+			  }
+			}
+			let menu = new Menu();
+			upButton.addEventListener('mousedown', menu, false);
+			upButton.addEventListener('mouseup', menu, false);
+			downButton.addEventListener('mousedown', menu, false);
+			downButton.addEventListener('mouseup', menu, false);
+			leftButton.addEventListener('mousedown', menu, false);
+			leftButton.addEventListener('mouseup', menu, false);
+			rightButton.addEventListener('mousedown', menu, false);
+			rightButton.addEventListener('mouseup', menu, false);
+
+			upButton.addEventListener('touchstart', menu, false);
+      		upButton.addEventListener('touchend', menu, false);
+      		downButton.addEventListener('touchstart', menu, false);
+      		downButton.addEventListener('touchend', menu, false);
+      		leftButton.addEventListener('touchstart', menu, false);
+      		leftButton.addEventListener('touchend', menu, false);
+      		rightButton.addEventListener('touchstart', menu, false);
+      		rightButton.addEventListener('touchend', menu, false);
+		</script>
+	</body>
+</html>

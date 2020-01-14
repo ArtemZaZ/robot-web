@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>Video Streaming Demonstration</title>
+  </head>
+  <body>
+    <h1>Video Streaming Demonstration</h1>
+    <img src="{{ url_for('video_feed') }}">
+    <button id="upButton" value="up">
+        UP
+    </button>
+    <button id="downButton" value="down">
+        DOWN
+    </button>
+    <button id="leftButton" value="left">
+        LEFT
+    </button>
+    <button id="rightButton" value="right">
+        RIGHT
+    </button>
+
+  <script>
+      var request = new XMLHttpRequest();
+
+      class Menu {
+        handleEvent(event) {
+          var val = event.currentTarget.value;
+          switch(event.type) {
+            case 'mousedown':
+              request.open("GET", "mouse/" + "press," + val, true);
+              break;
+            case 'mouseup':
+              request.open("GET", "mouse/" + "release," + val, true);
+              break;
+            case 'touchstart':
+              request.open("GET", "mouse/" + "press," + val, true);
+              break;
+            case 'touchend':
+              request.open("GET", "mouse/" + "release," + val, true);
+              break;
+          }
+          request.send();
+        }
+      }
+      let menu = new Menu();
+      upButton.addEventListener('mousedown', menu);
+      upButton.addEventListener('mouseup', menu);
+      downButton.addEventListener('mousedown', menu);
+      downButton.addEventListener('mouseup', menu);
+      leftButton.addEventListener('mousedown', menu);
+      leftButton.addEventListener('mouseup', menu);
+      rightButton.addEventListener('mousedown', menu);
+      rightButton.addEventListener('mouseup', menu);
+
+      upButton.addEventListener('touchstart', menu);
+      upButton.addEventListener('touchend', menu);
+      downButton.addEventListener('touchstart', menu);
+      downButton.addEventListener('touchend', menu);
+      leftButton.addEventListener('touchstart', menu);
+      leftButton.addEventListener('touchend', menu);
+      rightButton.addEventListener('touchstart', menu);
+      rightButton.addEventListener('touchend', menu);
+  </script>
+  </body>
+</html>
