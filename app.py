@@ -47,9 +47,9 @@ def mouseCommand(cmd=None):
         elif cmd[1] == 'down':
             robot.move(-robotSpeed)
         elif cmd[1] == 'left':
-            robot.rotate(-0.5)
+            robot.rotate(-robotSpeed)
         elif cmd[1] == 'right':
-            robot.rotate(0.5)
+            robot.rotate(robotSpeed)
 
     if cmd[0] == 'release':
         if cmd[1] == 'up':
