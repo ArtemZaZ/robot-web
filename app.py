@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
-from importlib import import_module
 import os
+import sys
+
 from flask import Flask, render_template, Response
 
-from camera.testcamera import Camera
-
 # Raspberry Pi camera module (requires picamera package)
-# from camera.raspcamera import Camera
+# from camera.testcamera import Camera
+from camera.raspcamera import Camera
 
+sys.path.append(os.path.join(os.path.expanduser("~"), 'platform'))  # https://github.com/ArtemZaZ/file-organization
+from configuration import robot  # platform.configuration.robot
 
 app = Flask(__name__)
+
+robotSpeed = 50
 
 
 @app.route('/')
@@ -37,8 +41,28 @@ def video_feed():
 def mouseCommand(cmd=None):
     cmd = cmd.split(',')
     print("cmd: ", cmd)
+    if cmd[0] == 'press':
+        if cmd[1] == 'up':
+            robot.move(robotSpeed)
+        elif cmd[1] == 'down':
+            robot.move(-robotSpeed)
+        elif cmd[1] == 'left':
+            robot.turnForward(-0.5)
+        elif cmd[1] == 'right':
+            robot.turnForward(0.5)
+
+    if cmd[0] == 'release':
+        if cmd[1] == 'up':
+            robot.move(0)
+        elif cmd[1] == 'down':
+            robot.move(0)
+        elif cmd[1] == 'left':
+            robot.turnForward(0)
+        elif cmd[1] == 'right':
+            robot.turnForward(0)
     return '', 200, {'Content-Type': 'text/plain'}
 
 
 if __name__ == '__main__':
-    app.run(host='10.1.0.99', threaded=True, port=5000)
+    app.run(host='192.168.42.10', threaded=True, port=5000)
+
