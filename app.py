@@ -40,5 +40,11 @@ def mouseCommand(cmd=None):
     return '', 200, {'Content-Type': 'text/plain'}
 
 
+@app.route('/range/<value>')
+def rangeValue(value=None):
+    print("value: ", value)
+    return '', 200, {'Content-Type': 'text/plain'}
+
+
 if __name__ == '__main__':
-    app.run(host='10.1.0.99', threaded=True, port=5000)
+    app.run(host='127.1.0.1', threaded=True, port=5000)
