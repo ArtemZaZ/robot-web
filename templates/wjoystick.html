@@ -35,8 +35,15 @@
 			</table>
 		</div>
 
-
 		<input type="range" class="camRange" min="0" max="100" value="50" step="2" id="cameraRange" oninput="onrange()">
+
+		<div class="widgets">
+			<table>
+				<tr align="center">
+					<td><div class="battery"><img class="batteryFrame" src="{{ url_for('battery_charge') }}"></div></p></td>
+				</tr>
+			</table>
+		</div>
 
 		<script>
 			var request = new XMLHttpRequest();

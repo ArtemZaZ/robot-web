@@ -4,12 +4,16 @@ import os
 from flask import Flask, render_template, Response
 
 from camera.testcamera import Camera
+from testsmodel.testrobot import Robot
+from battery.battery import Battery
+import time
 
 # Raspberry Pi camera module (requires picamera package)
 # from camera.raspcamera import Camera
 
 
 app = Flask(__name__)
+bat = Battery()
 
 
 @app.route('/')
@@ -26,10 +30,26 @@ def gen(camera):
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 
+def genVoltage(robot):
+    """ Переодически отправляем напряжение """
+    while True:
+        frame = bat.getImage(voltage=robot.voltage)
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        time.sleep(1)
+
+
 @app.route('/video_feed')
 def video_feed():
     """Video streaming route. Put this in the src attribute of an img tag."""
     return Response(gen(Camera()),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.route('/battery_charge')
+def battery_charge():
+    """  """
+    return Response(genVoltage(Robot()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
