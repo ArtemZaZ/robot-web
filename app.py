@@ -63,6 +63,8 @@ def mouseCommand(cmd=None):
             robot.rotate(-robotSpeed)
         elif cmd[1] == 'right':
             robot.rotate(robotSpeed)
+        elif cmd[1] == 'sound':
+            robot.beep()
 
     if cmd[0] == 'release':
         if cmd[1] == 'up':
@@ -78,7 +80,7 @@ def mouseCommand(cmd=None):
 
 @app.route('/range/<value>')
 def rangeValue(value=None):
-    robot.setCamera(value / 50 - 1)
+    robot.setCamera(int(value) / 50 - 1)
     return '', 200, {'Content-Type': 'text/plain'}
 
 
