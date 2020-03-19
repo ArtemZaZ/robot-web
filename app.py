@@ -80,7 +80,7 @@ def mouseCommand(cmd=None):
 
 @app.route('/range/<value>')
 def rangeValue(value=None):
-    robot.setCamera(int(value) / 50 - 1)
+    robot.setCamera((-int(value)) / 50 + 1)
     return '', 200, {'Content-Type': 'text/plain'}
 
 
