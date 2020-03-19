@@ -10,35 +10,49 @@
 			<!--color:#fff;-->
 		<!--</style>-->
 	</head>
-		<body>
-
-
+	<body>
 		<div class="videoWindow"><img class="videoFrame" src="{{ url_for('video_feed') }}"></div>
 
 		<div class="joystick">
 			<!--<div id="video"><img src="{{ url_for('video_feed') }}"></div>-->
 			<table>
-				<tr>
+				<tr align="center">
 					<td></td>
-					<td><input type="button" class="trbutton" value="up" id="upButton"></td>
+					<td><input type="button" class="trbutton up" value="up" id="upButton"></td>
 					<td></td>
 				</tr>
 
-				<tr>
-					<td><input type="button" class="trbutton" value="left" id="leftButton"></td>
-					<td></td>
-					<td><input type="button" class="trbutton" value="right" id="rightButton"></td>
+				<tr align="center">
+					<td><input type="button" class="trbutton left" value="left" id="leftButton"></td>
+					<td><input type="button" class="sdbutton" value="sound" id="soundButton"></td>
+					<td><input type="button" class="trbutton right" value="right" id="rightButton"></td>
 				</tr>
-				<tr>
+				<tr align="center">
 					<td></td>
-					<td><input type="button" class="trbutton" value="down" id="downButton"></td>
+					<td><input type="button" class="trbutton down" value="down" id="downButton"></td>
 					<td></td>
+				</tr>
+			</table>
+		</div>
+
+		<input type="range" class="camRange" min="0" max="100" value="50" step="2" id="cameraRange" oninput="onrange()">
+
+		<div class="widgets">
+			<table>
+				<tr align="center">
+					<td><div class="battery"><img class="batteryFrame" src="{{ url_for('battery_charge') }}"></div></p></td>
 				</tr>
 			</table>
 		</div>
 
 		<script>
 			var request = new XMLHttpRequest();
+
+			function onrange() {
+			    var range=document.getElementById('cameraRange');
+			    request.open("GET", "range/" + range.value, true);
+			    request.send();
+			}
 
 			class Menu {
 			  handleEvent(event) {
@@ -69,6 +83,8 @@
 			leftButton.addEventListener('mouseup', menu, false);
 			rightButton.addEventListener('mousedown', menu, false);
 			rightButton.addEventListener('mouseup', menu, false);
+			soundButton.addEventListener('mousedown', menu, false);
+			soundButton.addEventListener('mouseup', menu, false);
 
 			upButton.addEventListener('touchstart', menu, false);
       		upButton.addEventListener('touchend', menu, false);
@@ -78,6 +94,8 @@
       		leftButton.addEventListener('touchend', menu, false);
       		rightButton.addEventListener('touchstart', menu, false);
       		rightButton.addEventListener('touchend', menu, false);
+      		soundButton.addEventListener('touchstart', menu, false);
+      		soundButton.addEventListener('touchend', menu, false);
 		</script>
 	</body>
 </html>

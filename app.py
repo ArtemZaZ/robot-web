@@ -2,16 +2,20 @@
 import os
 import sys
 
+import time
 from flask import Flask, render_template, Response
 
 # Raspberry Pi camera module (requires picamera package)
 # from camera.testcamera import Camera
 from camera.raspcamera import Camera
-
+from battery.battery import Battery
 sys.path.append(os.path.join(os.path.expanduser("~"), 'platform'))  # https://github.com/ArtemZaZ/file-organization
 from configuration import robot  # platform.configuration.robot
+from testsmodel.testrobot import Robot
 
 app = Flask(__name__)
+bat = Battery()
+
 
 robotSpeed = 50
 
@@ -28,6 +32,15 @@ def gen(camera):
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+
+def genVoltage(robot):
+    """ Переодически отправляем напряжение """
+    while True:
+        frame = bat.getImage(voltage=robot.voltage)
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        time.sleep(1)
 
 
 @app.route('/video_feed')
@@ -63,6 +76,19 @@ def mouseCommand(cmd=None):
     return '', 200, {'Content-Type': 'text/plain'}
 
 
-if __name__ == '__main__':
-    app.run(host='192.168.42.10', threaded=True, port=5000)
+@app.route('/range/<value>')
+def rangeValue(value=None):
+    robot.setCamera(value / 50 - 1)
+    return '', 200, {'Content-Type': 'text/plain'}
 
+
+@app.route('/battery_charge')
+def battery_charge():
+    """  """
+    return Response(genVoltage(Robot()),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+if __name__ == '__main__':
+    robot.initializeAll()
+    app.run(host='192.168.42.10', threaded=True, port=5000)
