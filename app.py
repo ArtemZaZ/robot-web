@@ -67,4 +67,4 @@ def rangeValue(value=None):
 
 
 if __name__ == '__main__':
-    app.run(host='127.1.0.1', threaded=True, port=5000)
+    app.run(host='192.168.1.187', threaded=True, port=5000)

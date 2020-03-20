@@ -40,12 +40,40 @@
 		<div class="widgets">
 			<table>
 				<tr align="center">
-					<td><div class="battery"><img class="batteryFrame" src="{{ url_for('battery_charge') }}"></div></p></td>
+					<td><div class="battery"><img class="batteryFrame" src="{{ url_for('battery_charge') }}"></div></td>
+					<td><input type="button" class="fullscreenbtn" id="fullscreenButton"></td>
 				</tr>
 			</table>
 		</div>
 
 		<script>
+			var fullscreenButton = document.getElementById("fullscreenButton");
+
+			function toggleFullScreen() {
+			  var doc = window.document;
+			  var docEl = doc.documentElement;
+
+			  var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+			  var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+			  if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+			    requestFullScreen.call(docEl);
+			    fullscreenButton.style["background"] = "#ffffff00 url('/static/fullscreen-off.png')";
+			    fullscreenButton.style["height"] = "5vw";
+			    fullscreenButton.style["width"] = "5vw";
+			    fullscreenButton.style["background-size"] = "5vw 5vw";
+			  }
+			  else {
+			    cancelFullScreen.call(doc);
+			    fullscreenButton.style["background"] = "#ffffff00 url('/static/fullscreen-on.png')";
+			    fullscreenButton.style["height"] = "5vw";
+			    fullscreenButton.style["width"] = "5vw";
+			    fullscreenButton.style["background-size"] = "5vw 5vw";
+			  }
+			}
+
+			fullscreenButton.addEventListener("click", toggleFullScreen, false);
+
 			var request = new XMLHttpRequest();
 
 			function onrange() {
