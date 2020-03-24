@@ -97,7 +97,7 @@ def battery_charge():
 def onlineThread():
     while True:
         if cam is not None:
-                if cam.thread is None:
+                if cam.thread is not None:
                     robot.initializeAll()
                 else:
                     robot.release()
