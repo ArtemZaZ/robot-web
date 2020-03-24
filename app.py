@@ -105,5 +105,6 @@ def onlineThread():
 
 
 if __name__ == '__main__':
+    time.sleep(10)
     threading.Thread(target=onlineThread, daemon=True).start()
     app.run(host='192.168.42.10', threaded=True, port=5000)
