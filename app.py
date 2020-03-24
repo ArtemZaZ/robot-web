@@ -12,10 +12,11 @@ from battery.battery import Battery
 sys.path.append(os.path.join(os.path.expanduser("~"), 'platform'))  # https://github.com/ArtemZaZ/file-organization
 from configuration import robot  # platform.configuration.robot
 from testsmodel.testrobot import Robot
+import threading
 
 app = Flask(__name__)
 bat = Battery()
-
+cam = None
 
 robotSpeed = 50
 
@@ -46,6 +47,8 @@ def genVoltage(robot):
 @app.route('/video_feed')
 def video_feed():
     """Video streaming route. Put this in the src attribute of an img tag."""
+    global cam
+    cam = Camera()
     return Response(gen(Camera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
@@ -91,6 +94,15 @@ def battery_charge():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
+def onlineThread():
+    while True:
+        if cam is not None:
+            robot.initializeAll()
+        else:
+            robot.release()
+        time.sleep(1)
+
+
 if __name__ == '__main__':
-    robot.initializeAll()
+    threading.Thread(target=onlineThread, daemon=True).start()
     app.run(host='192.168.42.10', threaded=True, port=5000)
