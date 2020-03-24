@@ -2,7 +2,7 @@
 from importlib import import_module
 import os
 from flask import Flask, render_template, Response
-
+import threading
 from camera.testcamera import Camera
 from testsmodel.testrobot import Robot
 from battery.battery import Battery
@@ -14,6 +14,7 @@ import time
 
 app = Flask(__name__)
 bat = Battery()
+cam = None
 
 
 @app.route('/')
@@ -42,7 +43,9 @@ def genVoltage(robot):
 @app.route('/video_feed')
 def video_feed():
     """Video streaming route. Put this in the src attribute of an img tag."""
-    return Response(gen(Camera()),
+    global cam
+    cam = Camera()
+    return Response(gen(cam),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
@@ -66,5 +69,14 @@ def rangeValue(value=None):
     return '', 200, {'Content-Type': 'text/plain'}
 
 
+def onlineThread():
+    while True:
+        if cam is not None:
+            print(cam.thread is None)
+        time.sleep(1)
+
+
 if __name__ == '__main__':
+    threading.Thread(target=onlineThread, daemon=True).start()
     app.run(host='192.168.1.187', threaded=True, port=5000)
+

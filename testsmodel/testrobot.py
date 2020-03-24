@@ -9,4 +9,3 @@ class Robot:
         if self.__voltage < 0:
             self.__voltage = 100
         return self.__voltage
-
